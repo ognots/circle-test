@@ -1,0 +1,29 @@
+version: 2.1
+
+commands:
+  update_badge:
+    parameters:
+      filename:
+        description: "filename of badge to update"
+        type: string
+    steps:
+      - run:
+          name: install jq
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y jq git
+
+jobs:
+  badge_updater:
+    docker:
+      - image: circleci/golang:latest
+    steps:
+      - checkout
+      - update_badge:
+          filename: "foo"
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - badge_updater
